@@ -1,0 +1,10 @@
+Silly test utility for NOHZ cpuset.
+
+It accepts a single argument which is interperted as bit field:
+
+LSB : set CPU affinity to CPu number 3.
+
+LSB+1 : fork a child process after 100k loop iterations.
+
+A no argument run is equel to an argument of 1.
+
