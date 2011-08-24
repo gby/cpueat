@@ -11,43 +11,15 @@
 int flag;
 
 struct mode_bits_t {
-	unsigned char tickless:1;
 	unsigned char affinity:1;
 	unsigned char fork_test:1;
-	unsigned char unused :5;
+	unsigned char unused :6;
 } __attribute__((__packed__));
 
 static union mode_t {
 	struct mode_bits_t bits;
  	unsigned char val;
 } mode;
-
-int set_tickless(void) {
-
-	int fd;
-	int ret;
-
-	fd = open("/proc/self/nohz", O_WRONLY);
-
-	if(-1 == fd) {
-		perror("open");
-		ret = -1;
-		goto out;
-	}
-
-	ret = write(fd, "1\n", 2);
-
-	if(ret != 2) {
-		perror("write");
-		ret = -1;
-	} else
-		ret = 0;
-
-	close(fd);
-out:
-	return ret;
-}
-
 
 int set_affinity(int cpu) {
 
@@ -125,10 +97,9 @@ out:
 
 void parse_mode(int argc, char * argv[]) {
 
-	if(argc == 1) {
-		mode.bits.tickless = 1;
+	if(argc == 1) 
 		mode.bits.affinity = 1;
-	} else
+	else
 		mode.val = atoi(argv[1]);
 
 	return;
@@ -144,11 +115,6 @@ int main (int argc, char * argv[]) {
 	if(mode.bits.affinity) {
 		printf("Will set affinity to 3rd processor\n");
 		set_affinity(3);
-	}
-	
-	if(mode.bits.tickless) {
-		printf("Will request tickless mode\n");
-		set_tickless();
 	}
 	
 	if(mode.bits.fork_test) {

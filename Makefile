@@ -1,6 +1,6 @@
 
 CFLAGS = -Wall -g -D_GNU_SOURCE
-LDFLAGS = -static
+LDFLAGS = 
 
 BIN = cpueat
 
